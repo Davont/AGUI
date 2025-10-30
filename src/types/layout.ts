@@ -23,6 +23,7 @@ export type Borders = {
 export type BlockProps = React.HTMLAttributes<HTMLDivElement> & {
   width?: number | string;
   height?: number | string;
+  minHeight?: number | string;
   radius?: string;
 };
 

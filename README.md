@@ -1,231 +1,172 @@
-# Widget Renderer
+# AG-UI Widget Renderer (@hui/agui-render)
 
-一个基于 React + Vite + Tailwind CSS + shadcn/ui 的 Widget 渲染器，可以将 JSON 数据动态渲染成 React 组件。
+AG-UI Widget Renderer 是一个功能强大的渲染引擎，它可以将特定格式的 JSON 对象转换成干净、纯粹的 HTML 字符串。这个项目的核心目标是为AI驱动的UI生成提供一个可靠的、与前端框架无关的渲染层。
 
-## 功能特性
+AI可以专注于生成结构化的JSON，而此渲染器负责将其转换为可以在任何Web环境（React, Vue, Svelte, Angular, 或纯粹的JavaScript项目）中使用的HTML。
 
-- 🎨 **声明式 UI**：使用 JSON 描述界面结构
-- 🧩 **组件化设计**：支持多种布局和排版组件
-- 💅 **现代化样式**：基于 shadcn/ui 和 Tailwind CSS
-- 🔄 **动态渲染**：运行时解析 JSON 并渲染成真实的 React 组件
+## ✨ 特性
 
-## 技术栈
+- **🤖 AI友好**: 专为AI生成UI的场景设计，使用直观的JSON结构。
+- **🚀 框架无关**: 输出纯净的HTML和CSS，可以在任何前端框架中无缝集成。
+- **🎨 按需样式**: 使用Tailwind CSS，但最终只打包项目中实际用到的样式，生成一个极小的CSS文件，避免样式污染。
+- **🔒 类型安全**: 使用TypeScript编写，为JSON结构提供类型定义，确保健壮性。
+- **⚛️ React驱动**: 底层使用React和React DOM Server进行渲染，让你能利用React强大的组件生态来扩展自定义组件。
+- **🧪 经过测试**: 核心功能拥有完整的单元测试套件，确保质量和稳定性。
 
-- **React 18** - UI 框架
-- **Vite** - 构建工具
-- **TypeScript** - 类型安全
-- **Tailwind CSS** - CSS 框架
-- **shadcn/ui** - UI 组件库
+## 📦 安装
 
-## 快速开始
-
-### 安装依赖
+你可以使用你喜欢的包管理器进行安装：
 
 ```bash
-npm install
+# 使用 npm
+npm install @hui/agui-render
+
+# 使用 yarn
+yarn add @hui/agui-render
+
+# 使用 pnpm
+pnpm add @hui/agui-render
 ```
 
-### 启动开发服务器
+## 🚀 使用方法
 
-```bash
-npm run dev
-```
+使用 `ag-ui-render` 非常简单，主要分为两步：导入 `renderToHtml` 函数和导入样式文件。
 
-### 构建生产版本
+### 1. 导入和使用 `renderToHtml`
 
-```bash
-npm run build
-```
+`renderToHtml` 是本库唯一导出的核心函数。它接收一个符合 `WidgetNode` 类型的JSON对象，并返回一个包含HTML字符串和错误信息的对象。
 
-## 使用示例
+```javascript
+import { renderToHtml } from '@hui/agui-render';
 
-### 基础用法
-
-```tsx
-import { WidgetRenderer, WidgetNode } from './components/WidgetRenderer'
-
-const weatherWidget: WidgetNode = {
-  type: "Card",
-  className: "w-[400px] p-6",
+const myWidgetJson = {
+  type: 'Card',
   children: [
-    {
-      type: "Row",
-      gap: 4,
-      align: "center",
-      children: [
-        {
-          type: "Text",
-          value: "☀️",
-          size: "xl"
-        },
-        {
-          type: "Col",
-          gap: 0,
-          children: [
-            {
-              type: "Title",
-              value: "22°C",
-              size: "2xl"
-            },
-            {
-              type: "Text",
-              value: "北京 · 晴",
-              color: "tertiary"
-            }
-          ]
-        }
-      ]
-    }
+    { type: 'Title', value: 'Hello, World!' },
+    { type: 'Text', value: 'This is rendered from JSON.' }
   ]
-}
+};
 
-function App() {
-  return <WidgetRenderer node={weatherWidget} />
+// 生成HTML
+const { html, errors } = renderToHtml(myWidgetJson);
+
+if (errors.length > 0) {
+  console.error('渲染时发生错误:', errors);
+} else {
+  // 现在，'html' 变量包含了可以使用的HTML字符串
+  console.log(html);
+  // 输出: <div class="..."><h2 class="...">Hello, World!</h2>...</div>
 }
 ```
 
-## 支持的组件
+### 2. 导入CSS样式
 
-### 布局组件
+为了让生成的HTML看起来正确，你需要在你的项目入口文件中，**全局导入一次**本库提供的CSS文件。
 
-- **Card** - 卡片容器
-- **Box** - 基础容器（默认为列方向）
-- **Row** - 水平布局容器
-- **Col** - 垂直布局容器
-- **Spacer** - 弹性空白占位符
-- **Divider** - 分隔线
+```javascript
+// 例如，在你的 Vue 项目的 main.js 或 main.ts 中
+import { createApp } from 'vue'
+import App from './App.vue'
 
-### 排版组件
+// 导入 AG-UI 的样式
+import '@hui/agui-render/style.css'
 
-- **Title** - 标题
-- **Text** - 文本
-- **Caption** - 副标题/说明文字
+createApp(App).mount('#app')
+```
 
-### 交互组件
+### 在 Vue 中使用的示例
 
-- **Button** - 按钮
-- **Separator** - 分隔符
+在Vue组件中，你可以使用 `v-html` 指令来渲染 `renderToHtml` 函数返回的HTML字符串。
 
-## 组件属性
+```vue
+<template>
+  <div class="my-container">
+    <!-- 使用 v-html 来渲染动态生成的HTML -->
+    <div v-if="widgetHtml" v-html="widgetHtml"></div>
+    <!-- 如果有错误，则显示错误信息 -->
+    <div v-else-if="renderErrors.length > 0" class="error-panel">
+      <h3>渲染组件时出错：</h3>
+      <ul>
+        <li v-for="(error, index) in renderErrors" :key="index">{{ error }}</li>
+      </ul>
+    </div>
+  </div>
+</template>
 
-### Row
+<script>
+import { defineComponent, ref, onMounted } from 'vue';
+import { renderToHtml } from '@hui/agui-render';
+
+export default defineComponent({
+  name: 'WidgetDisplay',
+  setup() {
+    const widgetHtml = ref('');
+    const renderErrors = ref([]);
+
+    onMounted(() => {
+      // 在真实应用中，这个JSON可能来自API或AI服务
+      const aiGeneratedJson = {
+        type: 'Card',
+        size: 'md',
+        children: [
+          { type: 'Title', value: '来自Vue的问候' },
+          { type: 'Text', value: '这段HTML是由 @hui/agui-render 在Vue应用中渲染的。' }
+        ]
+      };
+
+      const { html, errors } = renderToHtml(aiGeneratedJson);
+      
+      if (errors.length > 0) {
+        renderErrors.value = errors;
+      } else {
+        widgetHtml.value = html;
+      }
+    });
+
+    return {
+      widgetHtml,
+      renderErrors,
+    };
+  },
+});
+</script>
+
+<style scoped>
+.error-panel {
+  color: red;
+  border: 1px solid red;
+  padding: 1rem;
+  border-radius: 8px;
+}
+</style>
+```
+
+## 📚 API 参考
+
+### `renderToHtml(json)`
+
+- **参数**:
+  - `json` (`WidgetNode`): 一个符合 `WidgetNode` 接口的JavaScript对象。
+- **返回**: 一个对象，包含两个属性：
+  - `html` (`string`): 渲染生成的HTML字符串。如果渲染过程中检测到任何错误（比如未知组件），此字符串将为空 `''`。
+  - `errors` (`string[]`): 一个包含所有错误信息的字符串数组。如果没有错误，此数组将为空 `[]`。
+
+## 📜 JSON 结构 (`WidgetNode`)
+
+一个基础的 `WidgetNode` 结构如下：
 
 ```typescript
-{
-  type: "Row",
-  gap?: number,              // 间距（单位：0.25rem）
-  padding?: number | { x?: number, y?: number },
-  align?: "start" | "center" | "end" | "stretch",
-  justify?: "start" | "center" | "end" | "between" | "around",
-  radius?: string,           // 圆角
-  background?: string,       // 背景颜色
-  border?: {                 // 边框
-    size?: number,
-    color?: string,
-    style?: string
-  }
+interface WidgetNode {
+  type: string; // 必须，对应一个已注册的组件名，如 'Card', 'Text'
+  children?: WidgetNode[]; // 可选，一个由子WidgetNode组成的数组
+  [key: string]: any; // 其他任何合法的prop，如 'value', 'size', 'style' 等
 }
 ```
 
-### Text
+## 🤝 贡献
 
-```typescript
-{
-  type: "Text",
-  value: string,             // 文本内容（必需）
-  size?: "xs" | "sm" | "md" | "lg" | "xl",
-  weight?: "normal" | "medium" | "semibold" | "bold",
-  color?: "primary" | "secondary" | "tertiary" | string,
-  italic?: boolean,
-  width?: number
-}
-```
+欢迎提交问题和拉取请求！如果你发现了bug或有功能建议，请随时在项目的Issue中提出。
 
-### Title
+## 📄 许可证
 
-```typescript
-{
-  type: "Title",
-  value: string,             // 标题内容（必需）
-  size?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl",
-  weight?: "normal" | "medium" | "semibold" | "bold",
-  color?: "primary" | "secondary" | string
-}
-```
-
-## 核心原理
-
-`WidgetRenderer` 的工作流程：
-
-1. **接收 JSON 数据** - 接受一个符合 `WidgetNode` 接口的 JSON 对象
-2. **解析节点类型** - 根据 `type` 字段查找对应的 React 组件
-3. **递归渲染子节点** - 处理 `children` 数组，递归调用渲染逻辑
-4. **组件映射** - 通过 `componentMap` 将字符串类型映射到真实的 React 组件
-5. **属性传递** - 将 JSON 中的其他属性作为 props 传递给组件
-
-```typescript
-const componentMap = {
-  Card,
-  Button,
-  Box,
-  Row,
-  Col,
-  Text,
-  Title,
-  // ... 更多组件
-}
-
-// 核心渲染逻辑
-const Component = componentMap[node.type]
-return <Component {...props}>{children}</Component>
-```
-
-## 项目结构
-
-```
-src/
-├── components/
-│   ├── ui/                    # shadcn/ui 组件
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   └── separator.tsx
-│   ├── widget/                # 自定义 Widget 组件
-│   │   ├── Layout.tsx         # 布局组件（Box, Row, Col, etc.）
-│   │   └── Typography.tsx     # 排版组件（Text, Title, Caption）
-│   └── WidgetRenderer.tsx     # 核心渲染器
-├── lib/
-│   └── utils.ts               # 工具函数
-├── App.tsx                    # 示例应用
-└── main.tsx                   # 入口文件
-```
-
-## 扩展组件
-
-要添加新的组件类型：
-
-1. 创建新的 React 组件
-2. 在 `WidgetRenderer.tsx` 的 `componentMap` 中注册
-3. 更新 TypeScript 类型定义
-
-```typescript
-// 1. 创建组件
-export const MyComponent: React.FC<Props> = (props) => {
-  return <div>{/* ... */}</div>
-}
-
-// 2. 注册到 componentMap
-const componentMap = {
-  // ... 现有组件
-  MyComponent,
-}
-
-// 3. 在 JSON 中使用
-{
-  type: "MyComponent",
-  // ... props
-}
-```
-
-## License
-
-MIT
+本项目采用 [MIT](https://opensource.org/licenses/MIT) 许可证。

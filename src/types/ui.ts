@@ -1,5 +1,6 @@
 import * as React from "react";
-import type { ThemeColor, Padding, ActionConfig } from "./card";
+import type { ThemeColor, ActionConfig } from "./card";
+import type { BoxProps } from "./layout";
 
 // --- UI Components Type Definitions ---
 

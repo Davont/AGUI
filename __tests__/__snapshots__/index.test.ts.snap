@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`renderToHtml > should correctly render a complex card layout and match the snapshot 1`] = `"<link rel="preload" as="image" href="/test.png"/><div class="rounded-lg border text-card-foreground shadow-sm flex flex-col w-full max-w-[440px] bg-card"><div class="flex-grow" style="padding:1rem"><h2 class="text-xl font-semibold">Complex Card</h2><div class="flex flex-row" style="gap:1rem"><img src="/test.png" alt="Test Image" class="w-full rounded-md" style="height:auto"/><span class="text-base font-normal">This is a complex layout.</span></div></div></div>"`;

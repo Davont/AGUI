@@ -3,7 +3,7 @@ import { useState } from "react"
 import { cn } from "@/lib/utils"
 // import { Button } from "./Button" // No longer needed
 import { ChevronDown, ChevronUp } from "lucide-react"
-import type { CardProps } from "@/types/card" 
+import type { CardProps, ActionConfig } from "@/types/card" 
 
 // --- Helper for Button Styles ---
 // Re-implementing the button logic directly inside Card's scope
@@ -51,7 +51,7 @@ const Card: React.FC<CardProps> = ({
   // to parse tokens like 'surface-secondary' or 'red-100'.
   // This version prioritizes direct CSS values and falls back to theme colors.
   const backgroundStyle = typeof background === 'string' && !background.startsWith('bg-')
-    ? { backgroundColor: background }
+    ? { background: background }
     : {}
   
   const backgroundClass = typeof background === 'string' && background.startsWith('bg-')
@@ -80,7 +80,7 @@ const Card: React.FC<CardProps> = ({
   const RootComponent = asForm ? "form" : "div"
   const hasFooter = confirm || cancel
 
-  const handleActionClick = (action: CardProps['confirm' | 'cancel']['action']) => {
+  const handleActionClick = (action: ActionConfig | undefined) => {
     if (!action) return
     // In a real app, this would dispatch the action.
     console.log("Action triggered:", action)
