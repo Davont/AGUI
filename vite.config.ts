@@ -27,6 +27,7 @@ export default defineConfig(({ mode }) => {
     // Configuration for building the demo application
     return {
       ...baseConfig,
+      base: './', // Use relative paths for assets
       build: {
         outDir: 'build',
         sourcemap: true,
