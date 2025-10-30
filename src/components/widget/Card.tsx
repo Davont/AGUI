@@ -37,6 +37,7 @@ const Card: React.FC<CardProps> = ({
   status,
   theme,
   className,
+  style,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(collapsed)
 
@@ -95,7 +96,7 @@ const Card: React.FC<CardProps> = ({
         theme, // Applies 'light' or 'dark' class for theme scoping
         className
       )}
-      style={backgroundStyle}
+      style={{ ...backgroundStyle, ...style }}
     >
       {/* Optional Status Header */}
       {status && (

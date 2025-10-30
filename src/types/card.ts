@@ -40,4 +40,5 @@ export type CardProps = {
   };
   theme?: "light" | "dark";
   className?: string;
+  style?: React.CSSProperties;
 };

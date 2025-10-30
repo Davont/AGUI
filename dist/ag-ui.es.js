@@ -48241,23 +48241,26 @@ var toKebabCase = (e) => e.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase(),
 }), getButtonClasses = (e = "default", t = "default") => cn("inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50", {
 	default: "bg-primary text-primary-foreground hover:bg-primary/90",
 	ghost: "hover:bg-accent hover:text-accent-foreground"
-}[e], { default: "h-10 px-4 py-2" }[t]), Card = ({ children: e, asForm: t = !1, size: n = "sm", padding: i = 4, background: o = "bg-card", collapsed: l = !1, confirm: u, cancel: d, status: f, theme: p, className: m }) => {
-	let [h, g] = useState(l), _ = {
+}[e], { default: "h-10 px-4 py-2" }[t]), Card = ({ children: e, asForm: t = !1, size: n = "sm", padding: i = 4, background: o = "bg-card", collapsed: l = !1, confirm: u, cancel: d, status: f, theme: p, className: m, style: h }) => {
+	let [g, _] = useState(l), v = {
 		sm: "w-full max-w-[360px]",
 		md: "w-full max-w-[440px]",
 		lg: "w-full max-w-[560px]",
 		full: "w-full"
-	}, v = typeof o == "string" && !o.startsWith("bg-") ? { background: o } : {}, y = typeof o == "string" && o.startsWith("bg-") ? o : "bg-card", b = () => typeof i == "number" ? { padding: `${i * .25}rem` } : typeof i == "string" ? { padding: i } : typeof i == "object" && i ? {
+	}, y = typeof o == "string" && !o.startsWith("bg-") ? { background: o } : {}, b = typeof o == "string" && o.startsWith("bg-") ? o : "bg-card", x = () => typeof i == "number" ? { padding: `${i * .25}rem` } : typeof i == "string" ? { padding: i } : typeof i == "object" && i ? {
 		paddingTop: i.top ? `${i.top * .25}rem` : void 0,
 		paddingRight: i.right ? `${i.right * .25}rem` : void 0,
 		paddingBottom: i.bottom ? `${i.bottom * .25}rem` : void 0,
 		paddingLeft: i.left ? `${i.left * .25}rem` : void 0
-	} : {}, x = t ? "form" : "div", S = u || d, C = (e) => {
+	} : {}, S = t ? "form" : "div", C = u || d, w = (e) => {
 		e && console.log("Action triggered:", e);
 	};
-	return /* @__PURE__ */ jsxs(x, {
-		className: cn("rounded-lg border text-card-foreground shadow-sm flex flex-col", _[n], y, p, m),
-		style: v,
+	return /* @__PURE__ */ jsxs(S, {
+		className: cn("rounded-lg border text-card-foreground shadow-sm flex flex-col", v[n], b, p, m),
+		style: {
+			...y,
+			...h
+		},
 		children: [
 			f && /* @__PURE__ */ jsx("div", {
 				className: "px-4 py-2 border-b",
@@ -48266,30 +48269,30 @@ var toKebabCase = (e) => e.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase(),
 					children: f.label
 				})
 			}),
-			!h && /* @__PURE__ */ jsx("div", {
+			!g && /* @__PURE__ */ jsx("div", {
 				className: "flex-grow",
-				style: b(),
+				style: x(),
 				children: e
 			}),
-			S && !h && /* @__PURE__ */ jsxs("div", {
+			C && !g && /* @__PURE__ */ jsxs("div", {
 				className: "flex justify-end items-center gap-2 p-4 border-t bg-muted/50",
 				children: [d && /* @__PURE__ */ jsx("button", {
 					type: "button",
 					className: getButtonClasses("ghost"),
-					onClick: () => C(d.action),
+					onClick: () => w(d.action),
 					children: d.label
 				}), u && /* @__PURE__ */ jsx("button", {
 					type: t ? "submit" : "button",
 					className: getButtonClasses("default"),
-					onClick: () => C(u.action),
+					onClick: () => w(u.action),
 					children: u.label
 				})]
 			}),
 			!!l && /* @__PURE__ */ jsx("button", {
 				type: "button",
-				onClick: () => g(!h),
+				onClick: () => _(!g),
 				className: "w-full text-center py-2 text-xs text-muted-foreground hover:bg-muted/50 border-t",
-				children: h ? /* @__PURE__ */ jsxs("div", {
+				children: g ? /* @__PURE__ */ jsxs("div", {
 					className: "flex items-center justify-center gap-1",
 					children: [/* @__PURE__ */ jsx(ChevronDown, { size: 14 }), " Show content"]
 				}) : /* @__PURE__ */ jsxs("div", {
