@@ -39,19 +39,16 @@ export default defineConfig(({ mode }) => {
       ...baseConfig,
       build: {
         lib: {
-          entry: path.resolve(__dirname, 'src/index.ts'),
+          entry: 'src/index.ts',
           name: 'AGUI',
           fileName: (format) => `ag-ui.${format}.js`,
         },
         rollupOptions: {
-          external: ['react', 'react-dom', 'react/jsx-runtime'],
-          output: {
-            globals: {
-              react: 'React',
-              'react-dom': 'ReactDOM',
-              'react/jsx-runtime': 'jsxRuntime',
-            },
-          },
+          // We intentionally do not set external/globals here.
+          // By moving react/react-dom to devDependencies and removing them from externals,
+          // we are telling Vite to bundle them directly into our library.
+          // This makes the library self-contained and usable in non-React environments
+          // without requiring the consumer to install React themselves.
         },
         outDir: 'dist',
         sourcemap: true,
