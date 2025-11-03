@@ -1,7 +1,6 @@
 import * as React from "react"
-import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
-import { icons } from "lucide-react"
+import { iconMap, type IconName } from "../icons"
 
 import { cn } from "@/lib/utils"
 
@@ -37,26 +36,22 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
-  iconStart?: string
+  iconStart?: IconName
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, iconStart, children, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
-    
-    // Dynamically select the icon from lucide-react
-    const LucideIcon = iconStart ? icons[iconStart.charAt(0).toUpperCase() + iconStart.slice(1) as keyof typeof icons] : null
+  ({ className, variant, size, iconStart, children, ...props }, ref) => {
+    const IconComponent = iconStart ? iconMap[iconStart] : null
 
     return (
-      <Comp
+      <button
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
       >
-        {LucideIcon && <LucideIcon className="mr-2 h-4 w-4" />}
+        {IconComponent && <IconComponent className="mr-2 h-4 w-4" />}
         {children}
-      </Comp>
+      </button>
     )
   }
 )

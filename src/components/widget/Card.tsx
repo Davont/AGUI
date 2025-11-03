@@ -2,7 +2,8 @@ import * as React from "react"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 // import { Button } from "./Button" // No longer needed
-import { ChevronDown, ChevronUp } from "lucide-react"
+import ChevronDown from '../icons/ChevronDown';
+import ChevronUp from '../icons/ChevronUp';
 import type { CardProps, ActionConfig } from "@/types/card" 
 
 // --- Helper for Button Styles ---
